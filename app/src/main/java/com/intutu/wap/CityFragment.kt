@@ -34,6 +34,7 @@ class CityFragment : Fragment() {
     private lateinit var xx: String
     private var adapter: wapAdapter? = null
     private lateinit var hellotxt : TextView
+    private lateinit var dailywapitems : List<jk>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,13 +68,15 @@ class CityFragment : Fragment() {
             Observer { dailywapItems ->
                 Log.d(TAG, "Response received OpenWeatherMaps $dailywapItems")
                 xx = dailywapItems.first().dt.toString()
+                dailywapitems = dailywapItems
 
                 hellotxt.setText(xx);
                 // Eventually, update data backing the recycler view
+                updateUI()
             })
 
 
-       // updateUI()
+
 
         return view
     }
@@ -85,7 +88,7 @@ class CityFragment : Fragment() {
         val weatherImageView: ImageView = itemView.findViewById(R.id.weather_image)
     }
 
-    private inner class wapAdapter(var dailywaps: List<DailyWeather>)
+    private inner class wapAdapter(var dailywaps: List<jk>)
         : RecyclerView.Adapter<CrimeHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
@@ -93,27 +96,27 @@ class CityFragment : Fragment() {
             val view = layoutInflater.inflate(R.layout.list_item_daywap, parent, false)
             return CrimeHolder(view)
         }
-        override fun getItemCount() = dailywaps.size
+        override fun getItemCount() = dailywapitems.size
         override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
-            val dailywap = dailywaps[position]
+            val dailywap = dailywapitems[position]
             holder.apply {
-                tempTextView.text = dailywap.temp
-                dateTextView.text = dailywap.date.toString()
+                tempTextView.text = dailywap.weather[0].main
+                dateTextView.text = dailywap.dt.toString()
 
-                if(dailywap.isRaining)
+               /* if(dailywap.isRaining)
                 {
                     weatherImageView.setImageResource(R.drawable.rain_weather)
                 }
                 else{
                     weatherImageView.setImageResource(R.drawable.clear_weather)
-                }
+                } */
             }
         }
     }
 
     private fun updateUI() {
 
-       // adapter = wapAdapter(dailywaps)
+        adapter = wapAdapter(dailywapitems)
         wapRecyclerView.adapter = adapter
     }
 

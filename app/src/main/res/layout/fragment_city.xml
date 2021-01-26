@@ -30,8 +30,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/wap_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="60sp"
+        android:layout_height="100sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp" />
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
