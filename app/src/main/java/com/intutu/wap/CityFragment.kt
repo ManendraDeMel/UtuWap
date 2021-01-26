@@ -1,12 +1,16 @@
 package com.intutu.wap
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -14,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val TAG = "RetroCall"
+private lateinit var wapviewmodel: WapViewModel
 
 /**
  * A simple [Fragment] subclass.
@@ -25,7 +31,9 @@ class CityFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var wapRecyclerView: RecyclerView
+    private lateinit var xx: String
     private var adapter: wapAdapter? = null
+    private lateinit var hellotxt : TextView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +41,8 @@ class CityFragment : Fragment() {
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
+
+
         }
     }
 
@@ -42,11 +52,28 @@ class CityFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_city, container, false)
+
+        hellotxt = view.findViewById(R.id.hellotext)
+
+
         wapRecyclerView =
                 view.findViewById(R.id.wap_recycler_view) as RecyclerView
         wapRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        updateUI()
+
+        wapviewmodel = ViewModelProviders.of(this).get(WapViewModel::class.java)
+        wapviewmodel.dailywapsLiveData.observe(
+            viewLifecycleOwner,
+            Observer { dailywapItems ->
+                Log.d(TAG, "Response received OpenWeatherMaps $dailywapItems")
+                xx = dailywapItems.first().dt.toString()
+
+                hellotxt.setText(xx);
+                // Eventually, update data backing the recycler view
+            })
+
+
+       // updateUI()
 
         return view
     }
@@ -85,10 +112,12 @@ class CityFragment : Fragment() {
     }
 
     private fun updateUI() {
-        val dailywaps = crimeListViewModel.crimes
-        adapter = wapAdapter(dailywaps)
+
+       // adapter = wapAdapter(dailywaps)
         wapRecyclerView.adapter = adapter
     }
+
+
 
 
     companion object {
@@ -101,13 +130,6 @@ class CityFragment : Fragment() {
          * @return A new instance of fragment CityFragment.
          */
         // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            CityFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() = CityFragment()
     }
 }
