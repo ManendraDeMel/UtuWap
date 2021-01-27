@@ -1,0 +1,33 @@
+Date --------
+
+SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", java.util.Locale.ENGLISH);
+Date myDate = sdf.parse("28/12/2013");
+sdf.applyPattern("EEE, d MMM yyyy");
+String sMyDate = sdf.format(myDate);
+
+--------------
+
+public SimpleDateFormat(String pattern) {
+    this(pattern, Locale.getDefault(Locale.Category.FORMAT));
+}
+
+--------------------
+
+
+GeoCoder ----------
+
+private fun getAddress(lat: Double, lng: Double): String {
+    val geocoder = Geocoder(this)
+    val list = geocoder.getFromLocation(lat, lng, 1)
+    return list[0].getAddressLine(0)
+}
+
+-----------
+
+val lat = -7.316463
+val lng = 112.748348
+
+val address = getAddress(lat, lng)
+// use address variable for your purpose
+
+------------------------
