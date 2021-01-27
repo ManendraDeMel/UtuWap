@@ -15,13 +15,15 @@ import java.util.*
 private const val TAG = "RetroCall"
 
 
-data class City(var temp: String)
+data class City(var lat: String , var lon : String)
 {
 
 
         private val retroApi: RetroApi
+        private var cityurl : String
 
         init {
+            cityurl = "data/2.5/onecall?"+ "lat=" + lat + "&lon=" + lon + "&exclude=hourly,alerts,minutely&appid=1f3697a3116bbe570ad8d3b67d3a299b"
             val retrofit: Retrofit = Retrofit.Builder()
                     .baseUrl("https://api.openweathermap.org/")
                     .addConverterFactory(GsonConverterFactory.create())
@@ -36,7 +38,7 @@ data class City(var temp: String)
 
     fun getWeather(): LiveData<List<jk>> {
         val responseLiveData: MutableLiveData<List<jk>> = MutableLiveData()
-        val flickrRequest: Call<JkList> = retroApi.getWeather()
+        val flickrRequest: Call<JkList> = retroApi.getWeather(cityurl)
         flickrRequest.enqueue(object : Callback<JkList> {
             override fun onFailure(call: Call<JkList>, t: Throwable) {
                 Log.e(TAG, "Failed Weather Request", t)
