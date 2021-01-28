@@ -21,14 +21,17 @@ data class City(var lat: String , var lon : String)
 
         private val retroApi: RetroApi
         private var cityurl : String
+        var cityname : String = "loc"
 
         init {
-            cityurl = "data/2.5/onecall?"+ "lat=" + lat + "&lon=" + lon + "&exclude=hourly,alerts,minutely&appid=1f3697a3116bbe570ad8d3b67d3a299b"
+            cityurl = "data/2.5/onecall?"+ "lat=" + lat + "&lon=" + lon + "&exclude=hourly,alerts,minutely&units=metric&appid=1f3697a3116bbe570ad8d3b67d3a299b"
             val retrofit: Retrofit = Retrofit.Builder()
                     .baseUrl("https://api.openweathermap.org/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
             retroApi = retrofit.create(RetroApi::class.java)
+
+            getWeather()
 
         }
 
@@ -52,33 +55,23 @@ data class City(var lat: String , var lon : String)
                 var galleryItems: List<jk> = jklistresponse?.wapobjects
                     ?: mutableListOf()
                 responseLiveData.value = galleryItems
+                if (jklistresponse != null) {
+                    cityname = jklistresponse.city
+                }
+                Log.d(TAG, "CITY NAME : $cityname")
             }
         })
+
         return responseLiveData
     }
 
+    fun getCitylocationname() : String{
 
-var dates : Date = Date()
+        return  cityname
+    }
 
-    private val dailywaps = listOf(
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates),
-            DailyWeather(dates)
 
-    )
+
 
 
 }

@@ -12,6 +12,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.*
+import java.util.concurrent.TimeUnit
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -33,9 +35,13 @@ class CityFragment : Fragment() {
     private lateinit var wapRecyclerView: RecyclerView
     private lateinit var xx: String
     private var adapter: wapAdapter? = null
-    private lateinit var hellotxt : TextView
-    private lateinit var dailywapitems : List<jk>
+    private lateinit var citynametxt : TextView
+    private lateinit var curennttemptxt : TextView
+    private lateinit var mainweathertxt : TextView
+    private lateinit var minmaxtxt : TextView
+    private lateinit var dailywapitems : List<DailyWeather>
     private lateinit var location : LatLon
+    private var utility : Utility = Utility()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +68,10 @@ class CityFragment : Fragment() {
 
         wapviewModelFactory = WapViewModelFactory(latt,long)
 
-        hellotxt = view.findViewById(R.id.hellotext)
+        citynametxt = view.findViewById(R.id.hellotext)
+        curennttemptxt = view.findViewById(R.id.tempcurrent)
+        mainweathertxt = view.findViewById(R.id.weathermain)
+        minmaxtxt = view.findViewById(R.id.tempminmax)
 
 
 
@@ -77,18 +86,32 @@ class CityFragment : Fragment() {
                 Observer { dailywapItems ->
                     Log.d(TAG, "Response received OpenWeatherMaps $dailywapItems")
                     //xx = dailywapItems.first().dt.toString()
-                    dailywapitems = dailywapItems
+                    dailywapitems = wapviewmodel.dailywaps
+
+                    wapviewmodel.dd()
+                    dailywapitems = wapviewmodel.dailywaps
+
+                    var xx : String = wapviewmodel.cityobject.cityname
 
 
-                    xx = xxx[1].toString() //+ xxx[1].toString()
-                    hellotxt.setText(xx);
+
+
+                    //citynametxt.setText(wapviewmodel.cityobject.getCitylocationname());
+                    Log.d("TAG2", "CITY NAME : $xx")
+
                     // Eventually, update data backing the recycler view
                     updateUI()
+                   // citynametxt.setText(wapviewmodel.cityobject.cityname);
+                    curennttemptxt.setText(dailywapItems.first().temp.day.toString().substringBefore(".") + "\u00B0" )
+                    mainweathertxt.setText(dailywapItems.first().weather[0].main)
+                    minmaxtxt.setText(dailywapItems.first().temp?.min.toString().substringBefore(".") + "\u00B0" + "/" + dailywapItems.first().temp?.max.toString().substringBefore(".") + "\u00B0")
+
+                    citynamepass()
                 })
 
 
 
-
+        //citynametxt.setText(wapviewmodel.cityobject.cityname);
         return view
     }
 
@@ -99,7 +122,7 @@ class CityFragment : Fragment() {
         val weatherImageView: ImageView = itemView.findViewById(R.id.weather_image)
     }
 
-    private inner class wapAdapter(var dailywaps: List<jk>)
+    private inner class wapAdapter(var dailywaps: List<DailyWeather>)
         : RecyclerView.Adapter<CrimeHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
@@ -111,8 +134,19 @@ class CityFragment : Fragment() {
         override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
             val dailywap = dailywapitems[position]
             holder.apply {
-                tempTextView.text = dailywap.weather[0].main
-                dateTextView.text = dailywap.dt.toString()
+                tempTextView.text = dailywap.temp //dailywap.temp.max.toString() + "/" + dailywap.temp.min.toString()//dailywap.weather[0].main
+                if(position == 0)
+                {
+                    dateTextView.text = "Tomorrow"
+                }
+                else
+                {
+                dateTextView.text = utility.getDateTime(dailywap.date.toString())
+                }
+
+                        if(dailywap.weathermain.equals("Clear")) {
+                          weatherImageView.setImageDrawable(getResources().getDrawable(R.drawable.clear_weather))
+                        }
 
                /* if(dailywap.isRaining)
                 {
@@ -125,9 +159,21 @@ class CityFragment : Fragment() {
         }
     }
 
+    private fun citynamepass() {
+
+        CoroutineScope(Dispatchers.IO).launch {
+            delay(TimeUnit.SECONDS.toMillis(1))
+            withContext(Dispatchers.Main) {
+                var  xx2 : String? = wapviewmodel.cityobject.getCitylocationname()
+                citynametxt.setText(xx2)
+            }
+        }
+
+    }
+
     private fun updateUI() {
 
-        adapter = wapAdapter(dailywapitems)
+        adapter = wapAdapter(wapviewmodel.dailywaps)
         wapRecyclerView.adapter = adapter
     }
 
