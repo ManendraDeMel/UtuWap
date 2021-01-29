@@ -8,10 +8,13 @@
     <TextView
         android:id="@+id/date_info"
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
-        android:text="Day and Date"/>
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:fontFamily="@font/freckle_face"
+        android:text="Day and Date"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 
 
 
@@ -23,13 +26,15 @@
         android:src="@drawable/rain_weather"/>
 
 
-
     <TextView
         android:id="@+id/temp_info"
         android:layout_width="0dp"
-        android:layout_weight="1"
-        android:gravity="right"
-        android:layout_gravity="center_vertical"
         android:layout_height="wrap_content"
-        android:text="Temp Min/Max"/>
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        android:fontFamily="@font/freckle_face"
+        android:gravity="right"
+        android:text="Temp Min/Max"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 </LinearLayout>

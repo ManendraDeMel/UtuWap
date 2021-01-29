@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/darkbg"
     tools:context=".CityFragment">
 
     <LinearLayout
@@ -20,28 +21,43 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="100sp"
             android:layout_marginBottom="10sp"
-            android:text="City" />
+            android:fontFamily="@font/freckle_face"
+            android:text="City"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white"
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/tempcurrent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
-            android:text="Current Temp" />
+            android:fontFamily="@font/freckle_face"
+            android:text="Current Temp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@color/white"
+            android:textSize="36sp" />
 
         <TextView
             android:id="@+id/tempminmax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
-            android:text="Min / Max Temp" />
+            android:fontFamily="@font/freckle_face"
+            android:text="Min / Max Temp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/weathermain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
-            android:text="Main Weather" />
+            android:fontFamily="@font/freckle_face"
+            android:text="Main Weather"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
 
 
     </LinearLayout>

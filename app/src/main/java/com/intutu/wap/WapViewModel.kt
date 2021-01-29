@@ -10,10 +10,15 @@ class WapViewModel(lat : String, lon : String) : ViewModel( ) {
 
     var latitude : String = lat
     var longitude : String = lon
+    var initcheck : Boolean = false
     var dailywapsLiveData: LiveData<List<jk>>
     lateinit var dailywaps : List<DailyWeather>
 
-    val currentdailywapsLiveData: LiveData<List<jk>>
+    var currentTemp : String = ""
+    var currentminmax : String = ""
+    var currentMain : String = ""
+
+    var cdailywapsLiveData: LiveData<List<jk>>
     var sydneydailywapsLiveData: LiveData<List<jk>>
     //lateinit var Sydneydailywaps : List<DailyWeather>
 
@@ -40,7 +45,7 @@ class WapViewModel(lat : String, lon : String) : ViewModel( ) {
 
 
 
-        currentdailywapsLiveData = currentcityobject.getWeather()
+        cdailywapsLiveData = currentcityobject.getWeather()
         dailywapsLiveData = currentcityobject.getWeather()
         sydneydailywapsLiveData = sydney.getWeather()
         hobartdailywapsLiveData = hobart.getWeather()
@@ -81,6 +86,16 @@ class WapViewModel(lat : String, lon : String) : ViewModel( ) {
             dailywapsLiveData = sydneydailywapsLiveData
         }
 
+        if(querycity.equals("hobart"))
+        {
+            dailywapsLiveData = hobartdailywapsLiveData
+        }
+
+        if(querycity.equals("perth"))
+        {
+            dailywapsLiveData = perthdailywapsLiveData
+        }
+
 
 
 
@@ -109,5 +124,38 @@ class WapViewModel(lat : String, lon : String) : ViewModel( ) {
 
 
     }
+
+    fun ddd(querycity : String) {
+            dailywapsLiveData = cdailywapsLiveData
+
+
+
+
+
+
+
+        dailywaps = listOf(
+                DailyWeather(dailywapsLiveData.value?.get(1)?.dt.toString(),dailywapsLiveData.value!!.get(1).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(1)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".") ),
+                DailyWeather(dailywapsLiveData.value?.get(2)?.dt.toString(),dailywapsLiveData.value!!.get(2).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(2)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(3)?.dt.toString(),dailywapsLiveData.value!!.get(3).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(3)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(4)?.dt.toString(),dailywapsLiveData.value!!.get(4).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(4)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(5)?.dt.toString(),dailywapsLiveData.value!!.get(5).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(5)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(6)?.dt.toString(),dailywapsLiveData.value!!.get(6).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(6)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(7)?.dt.toString(),dailywapsLiveData.value!!.get(7).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(7)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(0)?.dt.toString(),dailywapsLiveData.value!!.get(0).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(0)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(0)?.dt.toString(),dailywapsLiveData.value!!.get(0).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(0)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(0)?.dt.toString(),dailywapsLiveData.value!!.get(0).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(0)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(0)?.dt.toString(),dailywapsLiveData.value!!.get(0).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(0)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(0)?.dt.toString(),dailywapsLiveData.value!!.get(0).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(0)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(0)?.dt.toString(),dailywapsLiveData.value!!.get(0).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(0)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(0)?.dt.toString(),dailywapsLiveData.value!!.get(0).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(0)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(0)?.dt.toString(),dailywapsLiveData.value!!.get(0).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(0)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore(".")),
+                DailyWeather(dailywapsLiveData.value?.get(0)?.dt.toString(),dailywapsLiveData.value!!.get(0).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(0)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore("."))
+
+        )
+        citylocation.value =currentcityobject.getCitylocationname()
+        Log.d("TAG", "CITY NAME : $citylocation")
+    }
+
 
 }

@@ -1,40 +1,30 @@
 package com.intutu.wap
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 private const val TAG = "RetroCall"
 private lateinit var wapviewmodel: WapViewModel
 private lateinit var wapviewModelFactory: WapViewModelFactory
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SydneyFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class SydneyFragment : Fragment() {
+class PerthFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var wapRecyclerView: RecyclerView
     //private lateinit var xx: String
-    private var adapter: SydneyFragment.wapAdapter? = null
+    private var adapter: PerthFragment.wapAdapter? = null
     private lateinit var citynametxt : TextView
     private lateinit var curennttemptxt : TextView
     private lateinit var mainweathertxt : TextView
@@ -42,16 +32,6 @@ class SydneyFragment : Fragment() {
     private lateinit var dailywapitems : List<DailyWeather>
     private lateinit var location : LatLon
     private var utility : Utility = Utility()
-
-    interface Callbacks {
-        fun nextFragment(frname : String)
-    }
-    private var callbacks: Callbacks? = null
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        callbacks = context as Callbacks?
-    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,10 +51,10 @@ class SydneyFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_city, container, false)
 
-       // var latt : String = xxx[0].toString()
-       // var long : String = xxx[1].toString()
+        // var latt : String = xxx[0].toString()
+        // var long : String = xxx[1].toString()
 
-       // wapviewModelFactory = WapViewModelFactory(latt,long)
+        // wapviewModelFactory = WapViewModelFactory(latt,long)
 
         citynametxt = view.findViewById(R.id.hellotext)
         curennttemptxt = view.findViewById(R.id.tempcurrent)
@@ -94,7 +74,7 @@ class SydneyFragment : Fragment() {
                 viewLifecycleOwner,
                 Observer { dailywapItems ->
 
-                    Log.d(TAG, "Sydney Fragment initiate")
+                    Log.d(TAG, "Hobart Fragment initiate")
                     //xx = dailywapItems.first().dt.toString()
                     dailywapitems = wapviewmodel.dailywaps
 
@@ -116,24 +96,17 @@ class SydneyFragment : Fragment() {
 
 
                 })
-                    citynametxt.setText("Australia/Sydney")
-                    wapviewmodel.dd("sydney")
+        citynametxt.setText("Australia/Perth")
+        wapviewmodel.dd("perth")
 
-        citynametxt.setOnClickListener {
-            callbacks?.nextFragment("hobart")
-        }
+
 
 
         //citynametxt.setText(wapviewmodel.cityobject.cityname);
         return view
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        callbacks = null
-    }
-
-    private inner class SydneyCrimeHolder(view: View)
+    private inner class PerthCrimeHolder(view: View)
         : RecyclerView.ViewHolder(view) {
         val dateTextView: TextView = itemView.findViewById(R.id.date_info)
         val tempTextView: TextView = itemView.findViewById(R.id.temp_info)
@@ -141,15 +114,15 @@ class SydneyFragment : Fragment() {
     }
 
     private inner class wapAdapter(var dailywaps: List<DailyWeather>)
-        : RecyclerView.Adapter<SydneyFragment.SydneyCrimeHolder>() {
+        : RecyclerView.Adapter<PerthFragment.PerthCrimeHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
-                : SydneyFragment.SydneyCrimeHolder {
+                : PerthFragment.PerthCrimeHolder {
             val view = layoutInflater.inflate(R.layout.list_item_daywap, parent, false)
-            return SydneyCrimeHolder(view)
+            return PerthCrimeHolder(view)
         }
         override fun getItemCount() = dailywapitems.size
-        override fun onBindViewHolder(holder: SydneyFragment.SydneyCrimeHolder, position: Int) {
+        override fun onBindViewHolder(holder: PerthFragment.PerthCrimeHolder, position: Int) {
             val dailywap = dailywapitems[position]
             holder.apply {
                 tempTextView.text = dailywap.temp //dailywap.temp.max.toString() + "/" + dailywap.temp.min.toString()//dailywap.weather[0].main
@@ -162,13 +135,8 @@ class SydneyFragment : Fragment() {
                     dateTextView.text = utility.getDateTime(dailywap.date.toString())
                 }
 
-                if(dailywap.weathermain.equals("Clear"))
-                {
-                    weatherImageView.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.clear_weather))
-                }
-                else if(dailywap.weathermain.equals("Clear"))
-                {
-                    weatherImageView.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.clear_weather))
+                if(dailywap.weathermain.equals("Clear")) {
+                    weatherImageView.setImageDrawable(getResources().getDrawable(R.drawable.clear_weather))
                 }
 
                 /* if(dailywap.isRaining)
@@ -198,6 +166,6 @@ class SydneyFragment : Fragment() {
          * @return A new instance of fragment SydneyFragment.
          */
         // TODO: Rename and change types and number of parameters
-        fun newInstance() = SydneyFragment()
+        fun newInstance() = PerthFragment()
     }
 }
