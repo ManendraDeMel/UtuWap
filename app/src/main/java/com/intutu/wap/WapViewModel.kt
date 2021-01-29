@@ -10,21 +10,22 @@ class WapViewModel(lat : String, lon : String) : ViewModel( ) {
 
     var latitude : String = lat
     var longitude : String = lon
-    val dailywapsLiveData: LiveData<List<jk>>
+    var dailywapsLiveData: LiveData<List<jk>>
     lateinit var dailywaps : List<DailyWeather>
 
-    val sydneydailywapsLiveData: LiveData<List<jk>>
-    lateinit var Sydneydailywaps : List<DailyWeather>
+    val currentdailywapsLiveData: LiveData<List<jk>>
+    var sydneydailywapsLiveData: LiveData<List<jk>>
+    //lateinit var Sydneydailywaps : List<DailyWeather>
 
-    val hobartdailywapsLiveData: LiveData<List<jk>>
-    lateinit var hobartdailywaps : List<DailyWeather>
+    var hobartdailywapsLiveData: LiveData<List<jk>>
+    //lateinit var hobartdailywaps : List<DailyWeather>
 
-    val perthdailywapsLiveData: LiveData<List<jk>>
-    lateinit var perthdailywaps : List<DailyWeather>
+    var perthdailywapsLiveData: LiveData<List<jk>>
+    //lateinit var perthdailywaps : List<DailyWeather>
 
     var citylocation : MutableLiveData<String> = MutableLiveData()
 
-    var cityobject : City = City(lat , lon)
+    var currentcityobject : City = City(lat , lon)
     var sydney : City = City((-33.8696).toString() , (151.20695).toString())
     var hobart : City = City((-42.88164).toString() , (147.33162).toString())
     var perth : City = City((-31.95264).toString() , (115.85741).toString())
@@ -38,7 +39,9 @@ class WapViewModel(lat : String, lon : String) : ViewModel( ) {
 
 
 
-        dailywapsLiveData = cityobject.getWeather()
+
+        currentdailywapsLiveData = currentcityobject.getWeather()
+        dailywapsLiveData = currentcityobject.getWeather()
         sydneydailywapsLiveData = sydney.getWeather()
         hobartdailywapsLiveData = hobart.getWeather()
         perthdailywapsLiveData = perth.getWeather()
@@ -71,7 +74,14 @@ class WapViewModel(lat : String, lon : String) : ViewModel( ) {
 
     }
 
-    fun dd() {
+    fun dd(querycity : String) {
+
+        if(querycity.equals("sydney"))
+        {
+            dailywapsLiveData = sydneydailywapsLiveData
+        }
+
+
 
 
 
@@ -94,7 +104,7 @@ class WapViewModel(lat : String, lon : String) : ViewModel( ) {
                 DailyWeather(dailywapsLiveData.value?.get(0)?.dt.toString(),dailywapsLiveData.value!!.get(0).weather[0].main.toString(),temp = dailywapsLiveData.value?.get(0)?.temp?.min.toString().substringBefore(".") + "/" + dailywapsLiveData.value?.get(1)?.temp?.max.toString().substringBefore("."))
 
         )
-        citylocation.value =cityobject.getCitylocationname()
+        citylocation.value =currentcityobject.getCitylocationname()
         Log.d("TAG", "CITY NAME : $citylocation")
 
 
