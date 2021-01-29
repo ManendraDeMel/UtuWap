@@ -5,8 +5,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +37,11 @@ class PerthFragment : Fragment() {
     private lateinit var dailywapitems : List<DailyWeather>
     private lateinit var location : LatLon
     private var utility : Utility = Utility()
+    lateinit var paramsize: ViewGroup.LayoutParams
+    lateinit var paramsoriginal: ViewGroup.LayoutParams
+    lateinit var textlayout : LinearLayout
+    var recyclerclick : Boolean = false
+    private lateinit var parentlayout : ConstraintLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +70,8 @@ class PerthFragment : Fragment() {
         curennttemptxt = view.findViewById(R.id.tempcurrent)
         mainweathertxt = view.findViewById(R.id.weathermain)
         minmaxtxt = view.findViewById(R.id.tempminmax)
+        parentlayout = view.findViewById(R.id.parentlayout)
+        textlayout = view.findViewById(R.id.linearlayout1)
 
 
 
@@ -108,6 +120,9 @@ class PerthFragment : Fragment() {
             }
         })
 
+        paramsize= parentlayout.getLayoutParams()
+        val params2 = wapRecyclerView.getLayoutParams()
+        paramsoriginal = params2
 
 
 
@@ -116,10 +131,38 @@ class PerthFragment : Fragment() {
     }
 
     private inner class PerthCrimeHolder(view: View)
-        : RecyclerView.ViewHolder(view) {
+        : RecyclerView.ViewHolder(view) , View.OnClickListener {
         val dateTextView: TextView = itemView.findViewById(R.id.date_info)
         val tempTextView: TextView = itemView.findViewById(R.id.temp_info)
         val weatherImageView: ImageView = itemView.findViewById(R.id.weather_image)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View) {
+            var params: ViewGroup.LayoutParams = wapRecyclerView.getLayoutParams()
+            if (!recyclerclick)
+            {
+                textlayout.isVisible = false
+                params.height = paramsize.height
+                wapRecyclerView.setLayoutParams(params)
+                val aniFade = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in)
+                wapRecyclerView.startAnimation(aniFade)
+                recyclerclick = true
+            }
+            else{
+                textlayout.isVisible = true
+                params.height = 715
+                wapRecyclerView.setLayoutParams(params)
+                val aniFade = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_out)
+                wapRecyclerView.startAnimation(aniFade)
+                recyclerclick = false
+            }
+
+
+
+        }
     }
 
     private inner class wapAdapter(var dailywaps: List<DailyWeather>)
@@ -146,6 +189,14 @@ class PerthFragment : Fragment() {
 
                 if(dailywap.weathermain.equals("Clear")) {
                     weatherImageView.setImageDrawable(getResources().getDrawable(R.drawable.clear_weather))
+                }
+                else if (dailywap.weathermain.equals("Clouds"))
+                {
+                    weatherImageView.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.cloudy))
+                }
+                else if (dailywap.weathermain.equals("Snow"))
+                {
+                    weatherImageView.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.snowy))
                 }
 
                 /* if(dailywap.isRaining)

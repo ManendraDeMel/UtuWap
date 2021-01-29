@@ -8,9 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -37,19 +40,20 @@ class CityFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private lateinit var wapRecyclerView: RecyclerView
-    //private lateinit var xx: String
+    var appinit : Boolean = false
     private var adapter: wapAdapter? = null
     private lateinit var citynametxt : TextView
     private lateinit var curennttemptxt : TextView
     private lateinit var mainweathertxt : TextView
-    private lateinit var parentlayout : ConstraintLayout
     private lateinit var minmaxtxt : TextView
     private lateinit var dailywapitems : List<DailyWeather>
     private lateinit var location : LatLon
     private var utility : Utility = Utility()
     lateinit var paramsize: ViewGroup.LayoutParams
     lateinit var paramsoriginal: ViewGroup.LayoutParams
+    lateinit var textlayout : LinearLayout
     var recyclerclick : Boolean = false
+    private lateinit var parentlayout : ConstraintLayout
 
     interface Callbacks {
         fun nextFragment(frname: String)
@@ -91,6 +95,7 @@ class CityFragment : Fragment() {
         mainweathertxt = view.findViewById(R.id.weathermain)
         minmaxtxt = view.findViewById(R.id.tempminmax)
         parentlayout = view.findViewById(R.id.parentlayout)
+        textlayout = view.findViewById(R.id.linearlayout1)
 
 
 
@@ -144,6 +149,7 @@ class CityFragment : Fragment() {
 
         view.setOnTouchListener(object : SwipeChecker(requireActivity()) {
             override fun onSwipeLeft() {
+                if(appinit)
                 callbacks?.nextFragment("sydney")
             }
 
@@ -183,7 +189,7 @@ class CityFragment : Fragment() {
             var params: ViewGroup.LayoutParams = wapRecyclerView.getLayoutParams()
             if (!recyclerclick)
             {
-
+                textlayout.isVisible = false
                 params.height = paramsize.height
             wapRecyclerView.setLayoutParams(params)
                 val aniFade = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in)
@@ -191,6 +197,7 @@ class CityFragment : Fragment() {
             recyclerclick = true
         }
             else{
+                textlayout.isVisible = true
                     params.height = 715
                     wapRecyclerView.setLayoutParams(params)
                 val aniFade = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_out)
@@ -233,6 +240,14 @@ class CityFragment : Fragment() {
                 {
                     weatherImageView.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.clear_weather))
                 }
+                else if (dailywap.weathermain.equals("Clouds"))
+                {
+                    weatherImageView.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.cloudy))
+                }
+                else if (dailywap.weathermain.equals("Snow"))
+                {
+                    weatherImageView.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.snowy))
+                }
 
 
 
@@ -267,6 +282,8 @@ class CityFragment : Fragment() {
                 wapviewmodel.currentminmax = (wapviewmodel.cdailywapsLiveData.value!!.first().temp?.min.toString().substringBefore(".") + "\u00B0" + "/" + wapviewmodel.cdailywapsLiveData.value!!.first().temp?.max.toString().substringBefore(".") + "\u00B0")
                 var x2: String = wapviewmodel.currentminmax
                 minmaxtxt.setText(x2)
+
+                appinit = true
             }
         }
 

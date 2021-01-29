@@ -14,7 +14,8 @@
         android:gravity="center_horizontal|top|fill_vertical"
         android:orientation="vertical"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="16dp">
+        tools:layout_editor_absoluteX="16dp"
+        android:id="@+id/linearlayout1">
 
         <TextView
             android:id="@+id/hellotext"
@@ -34,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
             android:fontFamily="@font/freckle_face"
-            android:text="Current Temp"
+            android:text="UTU Weather App"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/white"
             android:textSize="36sp" />
@@ -45,7 +46,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
             android:fontFamily="@font/freckle_face"
-            android:text="Min / Max Temp"
+            android:text="Created By"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/white" />
 
@@ -55,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10sp"
             android:fontFamily="@font/freckle_face"
-            android:text="Main Weather"
+            android:text="Manendra De Mel"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/white"
             android:textSize="18sp" />
