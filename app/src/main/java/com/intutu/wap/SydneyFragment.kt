@@ -119,9 +119,14 @@ class SydneyFragment : Fragment() {
                     citynametxt.setText("Australia/Sydney")
                     wapviewmodel.dd("sydney")
 
-        citynametxt.setOnClickListener {
-            callbacks?.nextFragment("hobart")
-        }
+        view.setOnTouchListener(object: SwipeChecker(requireActivity()) {
+            override fun onSwipeLeft() {
+                callbacks?.nextFragment("hobart")
+            }
+            override fun onSwipeRight() {
+                requireActivity().onBackPressed()
+            }
+        })
 
 
         //citynametxt.setText(wapviewmodel.cityobject.cityname);

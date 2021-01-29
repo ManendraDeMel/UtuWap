@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/darkbg"
-    tools:context=".CityFragment">
+    tools:context=".CityFragment"
+    android:id="@+id/parentlayout">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -65,7 +66,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/wap_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="250sp"
+        android:layout_height="240sp"
         app:layout_constraintBottom_toBottomOf="parent"
         />
 

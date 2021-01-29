@@ -99,6 +99,15 @@ class PerthFragment : Fragment() {
         citynametxt.setText("Australia/Perth")
         wapviewmodel.dd("perth")
 
+        view.setOnTouchListener(object: SwipeChecker(requireActivity()) {
+            override fun onSwipeLeft() {
+
+            }
+            override fun onSwipeRight() {
+                requireActivity().onBackPressed()
+            }
+        })
+
 
 
 

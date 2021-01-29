@@ -6,8 +6,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -40,13 +42,17 @@ class CityFragment : Fragment() {
     private lateinit var citynametxt : TextView
     private lateinit var curennttemptxt : TextView
     private lateinit var mainweathertxt : TextView
+    private lateinit var parentlayout : ConstraintLayout
     private lateinit var minmaxtxt : TextView
     private lateinit var dailywapitems : List<DailyWeather>
     private lateinit var location : LatLon
     private var utility : Utility = Utility()
+    lateinit var paramsize: ViewGroup.LayoutParams
+    lateinit var paramsoriginal: ViewGroup.LayoutParams
+    var recyclerclick : Boolean = false
 
     interface Callbacks {
-        fun nextFragment(frname : String)
+        fun nextFragment(frname: String)
     }
     private var callbacks: Callbacks? = null
 
@@ -78,12 +84,15 @@ class CityFragment : Fragment() {
         var latt : String = xxx[0].toString()
         var long : String = xxx[1].toString()
 
-        wapviewModelFactory = WapViewModelFactory(latt,long)
+        wapviewModelFactory = WapViewModelFactory(latt, long)
 
         citynametxt = view.findViewById(R.id.hellotext)
         curennttemptxt = view.findViewById(R.id.tempcurrent)
         mainweathertxt = view.findViewById(R.id.weathermain)
         minmaxtxt = view.findViewById(R.id.tempminmax)
+        parentlayout = view.findViewById(R.id.parentlayout)
+
+
 
 
 
@@ -107,17 +116,15 @@ class CityFragment : Fragment() {
                     //var xx : String = wapviewmodel.cityobject.cityname
 
 
-
-
                     //citynametxt.setText(wapviewmodel.cityobject.getCitylocationname());
                     //Log.d("TAG2", "CITY NAME : $xx")
 
                     // Eventually, update data backing the recycler view
                     updateUI()
-                   // citynametxt.setText(wapviewmodel.cityobject.cityname);
-                        curennttemptxt.setText(dailywapItems.first().temp.day.toString().substringBefore(".") + "\u00B0")
-                        mainweathertxt.setText(dailywapItems.first().weather[0].main)
-                        minmaxtxt.setText(dailywapItems.first().temp?.min.toString().substringBefore(".") + "\u00B0" + "/" + dailywapItems.first().temp?.max.toString().substringBefore(".") + "\u00B0")
+                    // citynametxt.setText(wapviewmodel.cityobject.cityname);
+                    curennttemptxt.setText(dailywapItems.first().temp.day.toString().substringBefore(".") + "\u00B0")
+                    mainweathertxt.setText(dailywapItems.first().weather[0].main)
+                    minmaxtxt.setText(dailywapItems.first().temp?.min.toString().substringBefore(".") + "\u00B0" + "/" + dailywapItems.first().temp?.max.toString().substringBefore(".") + "\u00B0")
 
 
                     citynamepass()
@@ -133,16 +140,21 @@ class CityFragment : Fragment() {
         }
 
         wapviewmodel.initcheck = true
-        
 
-        view.setOnTouchListener(object: SwipeChecker(requireActivity()) {
+
+        view.setOnTouchListener(object : SwipeChecker(requireActivity()) {
             override fun onSwipeLeft() {
                 callbacks?.nextFragment("sydney")
             }
+
             override fun onSwipeRight() {
 
             }
         })
+
+        paramsize= parentlayout.getLayoutParams()
+         val params2 = wapRecyclerView.getLayoutParams()
+        paramsoriginal = params2
 
 
 
@@ -158,10 +170,37 @@ class CityFragment : Fragment() {
     }
 
     private inner class CrimeHolder(view: View)
-        : RecyclerView.ViewHolder(view) {
+        : RecyclerView.ViewHolder(view), View.OnClickListener {
         val dateTextView: TextView = itemView.findViewById(R.id.date_info)
         val tempTextView: TextView = itemView.findViewById(R.id.temp_info)
         val weatherImageView: ImageView = itemView.findViewById(R.id.weather_image)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View) {
+            var params: ViewGroup.LayoutParams = wapRecyclerView.getLayoutParams()
+            if (!recyclerclick)
+            {
+
+                params.height = paramsize.height
+            wapRecyclerView.setLayoutParams(params)
+                val aniFade = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in)
+                wapRecyclerView.startAnimation(aniFade)
+            recyclerclick = true
+        }
+            else{
+                    params.height = 715
+                    wapRecyclerView.setLayoutParams(params)
+                val aniFade = AnimationUtils.loadAnimation(requireContext(), R.anim.slide_out)
+                wapRecyclerView.startAnimation(aniFade)
+                    recyclerclick = false
+                }
+
+
+
+        }
     }
 
     private inner class wapAdapter(var dailywaps: List<DailyWeather>)
@@ -194,6 +233,7 @@ class CityFragment : Fragment() {
                 {
                     weatherImageView.setImageDrawable(ContextCompat.getDrawable(context!!, R.drawable.clear_weather))
                 }
+
 
 
 
