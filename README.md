@@ -24,15 +24,15 @@ Swipe left or right to Change Weather details -> city
 
 ## Main Components and Libraries
 
-**MainActivity.kt -> CityFragment.kt ( implements call back to mainactivity for onSwipe function ) -> next city fragment**<br/><br/>
-**3 similar Fragments -> {SydneyFragment , HobartFragment , PerthFragment}**<br/><br/>
-**City.kt (Main Networking class) using retrofit by sqaure - the only 3rd part library used in the whole project**<br/><br/>
-**WapViewModel.kt ( Main ViewModelClass context being mainactivity ) - invoked on onCreateView of Fragments**<br/><br/>
-**OncreateView of CityFragment uses factorymethod to create ViewModel passing lat , lon of current user - LatLon.java (GeoLocation class coded)**<br/><br/>
-**WapViewModel is initialised with Data for the cities calling city.getWeather(Lat,Lon) -> WapViewModel creates listof(DailyWeather objects) utilizing Api Data**<br/><br/>
-**jk.kt is a pojo class ( Json to Kotlin object ) -> JKList.kt is called on retrofit http response callback and stores 7 day weather data in 'jk' objects**<br/><br/>
-**Utility.kt is used for simple time and date convertions**<br/><br/>
-**SwipeChecker.kt is a listener class for swipe gestures**
+**MainActivity.kt** -> **CityFragment.kt** ( implements call back to mainactivity for onSwipe function ) -> next city fragment<br/><br/>
+3 similar Fragments -> {SydneyFragment , HobartFragment , PerthFragment}<br/><br/>
+**City.kt** (Main Networking class) using retrofit by sqaure - the only 3rd part library used in the whole project<br/><br/>
+**WapViewModel.kt** ( Main ViewModelClass context being mainactivity ) - invoked on onCreateView of Fragments<br/><br/>
+OncreateView of CityFragment uses factorymethod to create ViewModel passing lat , lon of current user - **LatLon.java** (GeoLocation class coded)<br/><br/>
+**WapViewModel.kt** is initialised with Data for the cities calling city.getWeather(Lat,Lon) -> WapViewModel creates listof(DailyWeather objects) utilizing Api Data<br/><br/>
+**jk.kt** is a pojo class ( Json to Kotlin object ) -> **JKList.kt** is called on retrofit http response callback and stores 7 day weather data in 'jk' objects<br/><br/>
+**Utility.kt** is used for simple time and date convertions<br/><br/>
+**SwipeChecker.kt** is a listener class for swipe gestures
 
 
 ## Setup
